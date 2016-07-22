@@ -24,7 +24,7 @@ public class ClientTask implements Runnable {
         _client = new Socket(serverAddress, port);
         _in = new BufferedReader(new InputStreamReader(_client.getInputStream()));
         _out = new PrintWriter(_client.getOutputStream(), true);
-        _windows = new GUI();
+        _windows = new GUI(_out);
         new Thread(this).start();
     }
 
@@ -38,8 +38,6 @@ public class ClientTask implements Runnable {
 
     @Override
     public void run() {
-
-
         try {
             String line = _in.readLine();
             while (line.startsWith("SUBMITNAME")) {
@@ -55,14 +53,11 @@ public class ClientTask implements Runnable {
                 if (line.startsWith("MESSAGE")) {
                     _windows.AddNewMsg(line.substring(8) + "\n");
                 }
-                String aux = _windows.GetNewMsg();
-                if (aux != null) {
-                    System.out.println(aux);
-                    _out.println(aux);
-                }
             }
         } catch (IOException e) {
             e.printStackTrace();
+        } finally {
+            EndConnection();
         }
     }
 }

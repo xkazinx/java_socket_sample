@@ -7,6 +7,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 
 /**
@@ -16,12 +17,11 @@ public class GUI extends JFrame {
     private JTextField _textField = new JTextField(40);
     private JTextArea _messageArea = new JTextArea(8, 40);
 
-    private ArrayList<String> _mensajes = new ArrayList<>();
+    private PrintWriter _msg_destination;
 
-
-
-    public GUI() throws IOException {
+    public GUI(PrintWriter msg_destination) throws IOException {
         super("myChat");
+        _msg_destination = msg_destination;
         this.setSize(500, 500);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         _textField.setEditable(false);
@@ -29,7 +29,8 @@ public class GUI extends JFrame {
         this.getContentPane().add(_textField, "Center");
         _textField.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                ResetInput();
+                _msg_destination.println(_textField.getText());
+                _textField.setText("");
             }
         });
         this.getContentPane().add(new JScrollPane(_messageArea), "North");
@@ -37,30 +38,11 @@ public class GUI extends JFrame {
         this.setVisible(true);
     }
 
-    private synchronized void ResetInput() {
-        _mensajes.add(_textField.getText());
-        _textField.setText("");
-        notifyAll();
-    }
-
-    public synchronized String GetNewMsg() {
-        String aux = null;
-        try {
-            while (_mensajes.size() <= 0)
-                wait();
-            aux = _mensajes.remove(0);
-            System.out.println("M: " + aux);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        return aux;
-    }
-
     public String GetName() {
         return JOptionPane.showInputDialog(
                 this,
-                "Choose a screen name:",
-                "Screen name selection",
+                "Ingrese su nick:",
+                "Registro",
                 JOptionPane.PLAIN_MESSAGE);
     }
 
