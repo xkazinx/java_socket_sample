@@ -1,8 +1,12 @@
 package com.company;
 
-public class Main {
+import java.io.IOException;
 
-    public static void main(String[] args) {
-	// write your code here
+public class Main {
+    public static SocketHandler _socket;
+
+    public static void main(String[] args) throws IOException {
+        _socket = new SocketHandler(9090);
+        _socket.Tick();
     }
 }
