@@ -3,7 +3,6 @@ package com.company;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.InetAddress;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -24,26 +23,12 @@ public class SocketHandler {
     {
         try {
             while (true) {
-                Socket peer = _listener.accept();
-                _clients.add(peer);
-                System.out.println("New Client accepted");
-                try
-                {
-                    PrintWriter out = new PrintWriter(peer.getOutputStream(), true);
-                    out.println(new Date().toString());
-                    System.out.println("Sent date to client");
-                }
-                finally
-                {
-                    peer.close();
-                    _clients.remove(peer);
-                    System.out.println("Client removed");
-                }
+                new PeerHandler(_listener.accept()).start();
             }
         }
         finally {
             _listener.close();
-            System.out.println("Socket Closed");
+            System.out.println("Socket closed");
         }
     }
 
