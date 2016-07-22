@@ -1,15 +1,17 @@
 package com.company;
 
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.InetAddress;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Date;
 
 public class SocketHandler {
-    public SocketHandler(int port) throws IOException
+    public SocketHandler(String ip, int port) throws IOException
     {
-        ServerSocket _listener = new ServerSocket(port);
+        _listener = new ServerSocket(port, 256, InetAddress.getByName(ip));
     }
 
     private ServerSocket _listener;
