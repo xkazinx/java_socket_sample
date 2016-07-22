@@ -14,6 +14,7 @@ public class SocketHandler {
     {
         _listener = new ServerSocket(port, 256, InetAddress.getByName(ip));
         System.out.printf("Socket opened at %s:%d\n", ip, port);
+        _clients = new ArrayList<>();
     }
 
     private ServerSocket _listener;
@@ -23,9 +24,9 @@ public class SocketHandler {
     {
         try {
             while (true) {
-                System.out.println("New Client accepted");
                 Socket peer = _listener.accept();
                 _clients.add(peer);
+                System.out.println("New Client accepted");
                 try
                 {
                     PrintWriter out = new PrintWriter(peer.getOutputStream(), true);
