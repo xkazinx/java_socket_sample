@@ -15,7 +15,7 @@ import java.util.ArrayList;
  * Created by GaBPC on 22/07/2016.
  */
 public class GUI extends JFrame {
-    private JTextField _textField = new JTextField(500);
+    private JTextField _textField = new JTextField(40);
     private JTextArea _messageArea = new JTextArea(8, 40);
 
     private PrintWriter _msg_destination;
@@ -28,7 +28,7 @@ public class GUI extends JFrame {
         caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
 
         _msg_destination = msg_destination;
-        this.setSize(500, 500);
+        this.setSize(100, 100);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         _textField.setEditable(false);
         _messageArea.setEditable(false);
