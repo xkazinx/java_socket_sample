@@ -30,6 +30,7 @@ public class Control {
     public void EndSession() {
         _client.SendMsg(_client.get_name() + " ha abandonado el chat");
         _client.EndConnection();
+        System.exit(0);
     }
 
     public String GetName() {
@@ -43,4 +44,6 @@ public class Control {
     public void AddMsg(String msg) {
         _windows.AddNewMsg(msg);
     }
+
+
 }

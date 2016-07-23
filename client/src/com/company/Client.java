@@ -42,6 +42,7 @@ public class Client implements Runnable {
     public void EndConnection() {
         try {
             _client.close();
+            System.out.println("Connection closed");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -69,9 +70,6 @@ public class Client implements Runnable {
             System.out.println(e.getMessage());
         } catch (IOException e) {
             System.out.println(e.getMessage());
-        }
-        finally {
-            System.exit(0);
         }
     }
 }
