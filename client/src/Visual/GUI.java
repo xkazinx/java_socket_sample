@@ -3,6 +3,7 @@ package Visual;
 import com.company.ClientTask;
 
 import javax.swing.*;
+import javax.swing.text.DefaultCaret;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -14,13 +15,18 @@ import java.util.ArrayList;
  * Created by GaBPC on 22/07/2016.
  */
 public class GUI extends JFrame {
-    private JTextField _textField = new JTextField(40);
+    private JTextField _textField = new JTextField(500);
     private JTextArea _messageArea = new JTextArea(8, 40);
 
     private PrintWriter _msg_destination;
 
     public GUI(PrintWriter msg_destination) throws IOException {
         super("myChat");
+
+        /*AutoScroll*/
+        DefaultCaret caret = (DefaultCaret)_messageArea.getCaret();
+        caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
+
         _msg_destination = msg_destination;
         this.setSize(500, 500);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

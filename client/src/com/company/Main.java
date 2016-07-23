@@ -8,7 +8,7 @@ public class Main {
 
     public static void main(String[] args) {
         try {
-            new ClientTask("127.0.0.1", 9091);
+            new ClientTask("74.91.121.41", 9091);
         } catch (IOException e) {
             e.printStackTrace();
         }
