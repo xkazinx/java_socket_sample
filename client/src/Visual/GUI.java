@@ -1,15 +1,12 @@
 package Visual;
 
-import com.company.ClientTask;
+import com.company.Control;
 
 import javax.swing.*;
 import javax.swing.text.DefaultCaret;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import javax.swing.text.StringContent;
+import java.awt.event.*;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.ArrayList;
 
 /**
  * Created by GaBPC on 22/07/2016.
@@ -18,38 +15,51 @@ public class GUI extends JFrame {
     private JTextField _textField = new JTextField(40);
     private JTextArea _messageArea = new JTextArea(8, 40);
 
-    private PrintWriter _msg_destination;
+    private Control _send_msg_control;
 
-    public GUI(PrintWriter msg_destination) throws IOException {
+    public GUI(Control control) throws IOException {
         super("myChat");
 
         /*AutoScroll*/
-        DefaultCaret caret = (DefaultCaret)_messageArea.getCaret();
+        DefaultCaret caret = (DefaultCaret) _messageArea.getCaret();
         caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
 
-        _msg_destination = msg_destination;
+        _send_msg_control = control;
+
         this.setSize(100, 100);
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         _textField.setEditable(false);
         _messageArea.setEditable(false);
         this.getContentPane().add(_textField, "Center");
         _textField.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                _msg_destination.println(_textField.getText());
+                _send_msg_control.SendMsg(_textField.getText());
                 _textField.setText("");
             }
         });
         this.getContentPane().add(new JScrollPane(_messageArea), "North");
+
+
+        WindowListener exitListener = new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                _send_msg_control.EndSession();
+            }
+        };
+        this.addWindowListener(exitListener);
+
         this.pack();
         this.setVisible(true);
     }
 
     public String GetName() {
-        return JOptionPane.showInputDialog(
+        String aux = JOptionPane.showInputDialog(
                 this,
                 "Ingrese su nick:",
                 "Registro",
                 JOptionPane.PLAIN_MESSAGE);
+        if (aux == null)
+            aux = "NoName";
+        return aux;
     }
 
     public void UserValidated() {

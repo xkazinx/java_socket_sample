@@ -7,25 +7,36 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.net.SocketException;
 
 /**
  * Created by GaBPC on 22/07/2016.
  */
-public class ClientTask implements Runnable {
+public class Client implements Runnable {
 
     private BufferedReader _in;
     private PrintWriter _out;
 
     private Socket _client;
 
-    private GUI _windows;
+    private Control _control;
 
-    public ClientTask(String serverAddress, int port) throws IOException {
+    private String _name;
+
+    public Client(String serverAddress, int port, Control control) throws IOException {
         _client = new Socket(serverAddress, port);
         _in = new BufferedReader(new InputStreamReader(_client.getInputStream()));
         _out = new PrintWriter(_client.getOutputStream(), true);
-        _windows = new GUI(_out);
+        _control = control;
         new Thread(this).start();
+    }
+
+    public void SendMsg(String msg) {
+        _out.println(msg);
+    }
+
+    public String get_name() {
+        return _name;
     }
 
     public void EndConnection() {
@@ -41,23 +52,26 @@ public class ClientTask implements Runnable {
         try {
             String line = _in.readLine();
             while (line.startsWith("SUBMITNAME")) {
-                String name = _windows.GetName();
-                _out.println(name);
+                _name = _control.GetName();
+                _out.println(_name);
                 line = _in.readLine();
             }
             if (line.startsWith("NAMEACCEPTED"))
-                _windows.UserValidated();
+                _control.UserValidated();
             _out.println("Bienvenido al chat");
             while (true) {
                 line = _in.readLine();
                 if (line.startsWith("MESSAGE")) {
-                    _windows.AddNewMsg(line.substring(8) + "\n");
+                    _control.AddMsg(line.substring(8) + "\n");
                 }
             }
+        } catch (SocketException e) {
+            System.out.println(e.getMessage());
         } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            EndConnection();
+            System.out.println(e.getMessage());
+        }
+        finally {
+            System.exit(0);
         }
     }
 }
